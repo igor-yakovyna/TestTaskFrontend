@@ -1,0 +1,80 @@
+<h2>Users List</h2>
+<div class="mat-elevation-z8" layout="row">
+  <button mat-fab color="primary" 
+          (click)="addUserRowItem()" 
+          [disabled]="isEdit()"
+          class="button-add-row">
+    <mat-icon>add</mat-icon>
+  </button>
+  <table mat-table [dataSource]="dataSource">
+    <ng-container [matColumnDef]="col.key" *ngFor="let col of columnsSchema">
+    <th mat-header-cell *matHeaderCellDef [ngSwitch]="col.key">    
+      <span *ngSwitchDefault>{{ col.label }}</span>
+    </th>
+
+    <td mat-cell *matCellDef="let element">
+      <div [ngSwitch]="col.type" *ngIf="!element.isEdit">
+        <div class="action-btn " *ngSwitchCase="'isEdit'">
+          <button mat-mini-fab
+                  (click)="element.isEdit = !element.isEdit"
+                  [disabled]="isEdit()"  
+                  class="button-edit-row">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button  mat-mini-fab
+                  (click)="removeUserRowItem(element.id)"
+                  class="button-delete-row">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+        <span *ngSwitchCase="'date'">
+          {{ element[col.key] | date: 'mediumDate' }}
+        </span>
+        <span *ngSwitchDefault>
+          {{ element[col.key] }}
+        </span>
+      </div>
+      <div [ngSwitch]="col.type" *ngIf="element.isEdit">
+        <div class="action-btn" *ngSwitchCase="'isEdit'">
+          <button mat-mini-fab color="warn" 
+          (click)="updateUserRowItem(element)" 
+          [disabled]="disableSubmit(element.id)"
+          class="button-edit-row">
+            <mat-icon>done</mat-icon>
+          </button>
+        </div>
+        <mat-form-field *ngSwitchCase="'date'" fxFlex>
+          <mat-label>Choose a date</mat-label>
+          <input matInput [matDatepicker]="picker" [(ngModel)]="element[col.key]"/>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field *ngSwitchDefault fxFlex>
+          <input matInput 
+            [required]="col.required"
+            [disabled]="!col.editable"
+            [pattern]="col.pattern" 
+            [type]="col.type"
+            [(ngModel)]="element[col.key]"
+            (change)="inputHandler($event, element.id, col.key)"/>
+        </mat-form-field>
+      </div>
+    </td>
+
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<section>
+  <div>
+    <button mat-flat-button color="accent" 
+            (click)="saveChanges()"
+            [disabled]="isEdit() || !hasChanges()"
+            class="button-save">Save</button>
+    <button mat-flat-button color="warn" 
+            (click)="cancelChanges()"
+            [disabled]="isEdit()">Cancel</button>
+  </div>
+</section>
+</div>

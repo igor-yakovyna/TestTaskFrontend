@@ -1,0 +1,35 @@
+h2 {
+  text-align: center;
+  padding-top: 20px;
+}
+
+table {
+  width: 100%;
+  margin: auto;
+}
+
+.input-field {
+  width: 80px;
+}
+
+.button-add-row {
+  background: #0f760f;
+  margin-left: 10px;
+}
+
+.button-edit-row {
+  background: #2652f2;
+}
+
+.button-delete-row {
+  background: #f31d1dfb;
+}
+
+.button-save {
+  background: #0f760f;
+  margin-left: 10px;
+}
+
+mat-form-field {
+  width: 7.75em;
+} 
